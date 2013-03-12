@@ -6,27 +6,28 @@
  * Licensed under the MIT license.
  */
 
-var cmd = require('cmd-util');
-var iduri = cmd.iduri;
-var ast = cmd.ast;
 var path = require('path');
 
-
 module.exports = function(grunt) {
+
+  var script = require('./lib/script').init(grunt);
+
+  var processors = {
+    '.js': script.jsConcat,
+  };
 
   grunt.registerMultiTask('concat', 'concat cmd modules.', function() {
     // Merge task-specific and/or target-specific options with these defaults.
     var options = this.options({
       separator: grunt.util.linefeed,
+      processors: {},
       relative: true,
       banner: ''
     });
 
-    var records = [];
-
     this.files.forEach(function(f) {
       // reset records
-      records = [];
+      grunt.option('concat-records', []);
 
       // Concat specified files.
       var src = options.banner + f.src.filter(function(filepath) {
@@ -38,8 +39,12 @@ module.exports = function(grunt) {
           return true;
         }
       }).map(function(filepath) {
-        // Read file source.
-        return readRelative(filepath);
+        var extname = path.extname(filepath);
+        var processor = options.processors[extname] || processors[extname];
+        if (!processor) {
+          return grunt.file.read(filepath);
+        }
+        return processor({src: filepath}, options);
       }).join(grunt.util.normalizelf(options.separator));
 
       // Write the destination file.
@@ -48,40 +53,5 @@ module.exports = function(grunt) {
       // Print a success message.
       grunt.log.writeln('File "' + f.dest + '" created.');
     });
-
-    function readRelative(filepath) {
-      var data = grunt.file.read(filepath);
-      var meta = ast.parseFirst(data);
-
-      if (grunt.util._.contains(records, meta.id)) {
-        return '';
-      }
-      records.push(meta.id);
-
-      if (!options.relative) {
-        return data;
-      }
-
-      var rv = meta.dependencies.map(function(dep) {
-        if (dep.charAt(0) === '.') {
-          var id = iduri.absolute(meta.id, dep);
-          if (grunt.util._.contains(records, id)) {
-            return '';
-          }
-          records.push(id);
-
-          var fpath = path.join(path.dirname(filepath), dep);
-          if (!/\.js$/.test(fpath)) fpath += '.js';
-          if (!grunt.file.exists(fpath)) {
-            grunt.log.warn('file ' + fpath + ' not found');
-            return '';
-          }
-          return grunt.file.read(fpath);
-        }
-        return '';
-      }).join(grunt.util.normalizelf(options.separator));
-      return [data, rv].join(grunt.util.normalizelf(options.separator));
-    }
   });
-
 };
