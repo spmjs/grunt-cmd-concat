@@ -17,14 +17,14 @@ One the plugin has been installed, it may be enabled inside your Gruntfile with 
 grunt.loadNpmTasks('grunt-cmd-concat');
 ```
 
-## The "cmd_concat" task
+## The "concat" task
 
 ### Overview
 In your project's Gruntfile, add a section named `cmd_concat` to the data object passed into `grunt.initConfig()`.
 
 ```js
 grunt.initConfig({
-  cmd_concat: {
+  concat: {
     options: {
       // Task-specific options go here.
     },
@@ -38,51 +38,65 @@ grunt.initConfig({
 ### Options
 
 #### options.separator
+
 Type: `String`
 Default value: `',  '`
 
 A string value that is used to do something with whatever.
 
-#### options.punctuation
-Type: `String`
-Default value: `'.'`
+#### options.relative
 
-A string value that is used to do something else with whatever else.
+Type: `Boolean`
+Default value: `true`
+
+Include all relative dependencies.
 
 ### Usage Examples
 
-#### Default Options
-In this example, the default options are used to do something with whatever. So if the `testing` file has the content `Testing` and the `123` file had the content `1 2 3`, the generated result would be `Testing, 1 2 3.`
+#### Simple Concat
+
+This is the same as `grunt-contrib-concat`.
 
 ```js
 grunt.initConfig({
-  cmd_concat: {
-    options: {},
-    files: {
-      'dest/default_options': ['src/testing', 'src/123'],
-    },
-  },
-})
-```
-
-#### Custom Options
-In this example, custom options are used to do something else with whatever else. So if the `testing` file has the content `Testing` and the `123` file had the content `1 2 3`, the generated result in this case would be `Testing: 1 2 3 !!!`
-
-```js
-grunt.initConfig({
-  cmd_concat: {
+  concat: {
     options: {
-      separator: ': ',
-      punctuation: ' !!!',
+      relative: false
     },
     files: {
-      'dest/default_options': ['src/testing', 'src/123'],
+      'dist/a.js': ['src/a.js', 'src/b.js'],
     },
   },
 })
 ```
+
+#### Relative Concat
+
+This will include all relative dependencies.
+
+```js
+grunt.initConfig({
+  concat: {
+    options: {
+      relative: true
+    },
+    files: {
+      'dist/a.js': ['src/a.js', 'src/b.js'],
+    },
+  },
+})
+```
+
+The `a.js` is something like:
+
+```js
+define('a', ['./c'], ...)
+```
+
+And the result should be the concat of `a.js`, `c.js` and `b.js`.
 
 ## Contributing
+
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [Grunt](http://gruntjs.com/).
 
 ## Release History
