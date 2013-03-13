@@ -34,9 +34,8 @@ module.exports = function(grunt) {
           relative: true
         },
         files: {
-          'tmp/a.js': [
-            'test/fixtures/a.js', 'test/fixtures/b.js'
-          ],
+          'tmp/a.js': ['test/fixtures/a.js', 'test/fixtures/b.js'],
+          'tmp/foo.css': ['test/fixtures/foo.css'],
         },
       }
     },

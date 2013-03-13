@@ -1,0 +1,6 @@
+/*! {% import "./base.css" %} */
+/*! {% import "alice/1.0.0/alice.css" %} */
+
+body {
+  content: 'bar';
+}
