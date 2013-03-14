@@ -11,68 +11,108 @@ exports.init = function(grunt) {
   exports.cssConcat = function(fileObj, options) {
     var data = grunt.file.read(fileObj.src);
     var meta = css.parse(data)[0];
-
-    var records = grunt.option('concat-records');
-    if (grunt.util._.contains(records, meta.id)) {
+    var id = meta.id;
+    if (!id) {
+      grunt.log.warn('require a transported file.');
       return '';
     }
-    records.push(meta.id);
+
+    var records = grunt.option('concat-records');
+
+    var imports = [];
+
+    if (grunt.util._.contains(records, id)) {
+      return '';
+    }
 
     if (!options.relative) {
       return data;
     }
 
-    function recurse(code) {
-      var content, fpath;
+    while (hasImport()) {
+    }
 
-      return css.stringify(code, function(node) {
+    function hasImport() {
+      meta = css.parse(data)[0];
+
+      var hasImport = false;
+      data = css.stringify(meta.code, function(node) {
+        if (node.type === 'import' && node.id) {
+          hasImport = true;
+          return importNode(node);
+        }
+      });
+      return hasImport;
+    }
+
+    function importNode(node) {
+      // circle imports
+      if (grunt.util._.contains(imports, node.id)) {
+        return false;
+      }
+      imports.push(node.id);
+
+      var fpath, parsed;
+      if (node.id.charAt(0) === '.') {
+        fpath = path.join(path.dirname(fileObj.src), node.id);
+        if (!/\.css$/.test(fpath)) fpath += '.css';
+        if (!grunt.file.exists(fpath)) {
+          grunt.log.warn('file ' + fpath + ' not found');
+          return false;
+        }
+
+        parsed = css.parse(grunt.file.read(fpath))[0];
+
+        // remove circle imports
+        if (parsed.id === id) {
+          grunt.log.warn('file ' + fpath + ' has circle dependencies');
+          return false;
+        }
+
+        parsed.id = node.id;
+        return parsed;
+      }
+      var fileInPaths;
+      options.paths.some(function(basedir) {
+        fpath = path.join(basedir, node.id);
+        if (!/\.css$/.test(fpath)) fpath += '.css';
+        if (grunt.file.exists(fpath)) {
+          fileInPaths = fpath;
+          return true;
+        }
+      });
+      if (!fileInPaths) {
+        grunt.log.warn('file ' + node.id + ' not found');
+        return false;
+      }
+      parsed = css.parse(grunt.file.read(fpath))[0];
+      parsed.id = node.id;
+      return parsed;
+    }
+
+    function toString() {
+      meta = css.parse(data)[0];
+      return css.stringify(meta.code, function(node) {
         if (node.id && grunt.util._.contains(records, node.id)) {
           return false;
         }
         if (node.id) {
-          records.push(node.id);
-        }
-        if (node.type === 'import' && node.id) {
           if (node.id.charAt(0) === '.') {
-            var id = iduri.absolute(meta.id, node.id);
-            if (grunt.util._.contains(records, id)) {
-              return false; 
-            }
-            records.push(id);
-            fpath = path.join(path.dirname(fileObj.src), node.id);
-            if (!/\.css$/.test(fpath)) fpath += '.css';
-            if (!grunt.file.exists(fpath)) {
-              grunt.log.warn('file ' + fpath + ' not found');
-              return false;
-            }
-            content = grunt.file.read(fpath);
-            return recurse(css.parse(content));
+            node.id = iduri.absolute(id, node.id);
           }
-          var fileInPaths;
-          options.paths.some(function(basedir) {
-            fpath = path.join(basedir, node.id);
-            if (!/\.css$/.test(fpath)) fpath += '.css';
-            if (grunt.file.exists(fpath)) {
-              fileInPaths = fpath;
-              return true;
-            }
-          });
-          if (!fileInPaths) {
-            grunt.log.warn('file ' + node.id + ' not found');
+          if (grunt.util._.contains(records, node.id)) {
             return false;
           }
-          content = grunt.file.read(fpath);
-          return recurse(css.parse(content));
+          records.push(node.id);
+          return node;
         }
       });
     }
 
-    var ret = [
-      format('/*! block %s */', meta.id),
-      recurse(meta.code),
-      format('/*! endblock %s */', meta.id)
+    return [
+      format('/*! define %s */', id),
+      toString()
     ].join('\n');
-    return ret;
   };
 
   return exports;

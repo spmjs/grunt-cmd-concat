@@ -1,4 +1,5 @@
 /*! import ./base.css */
+/*! import ./foo.css */
 
 body {content: 'bar'}
 

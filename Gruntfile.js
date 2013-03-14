@@ -31,6 +31,7 @@ module.exports = function(grunt) {
     concat: {
       dist: {
         options: {
+          paths: ['test/sea-modules'],
           relative: true
         },
         files: {
