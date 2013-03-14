@@ -11,15 +11,18 @@ var path = require('path');
 module.exports = function(grunt) {
 
   var script = require('./lib/script').init(grunt);
+  var style = require('./lib/style').init(grunt);
 
   var processors = {
     '.js': script.jsConcat,
+    '.css': style.cssConcat
   };
 
   grunt.registerMultiTask('concat', 'concat cmd modules.', function() {
     // Merge task-specific and/or target-specific options with these defaults.
     var options = this.options({
       separator: grunt.util.linefeed,
+      paths: ['sea-modules'],
       processors: {},
       relative: true,
       banner: ''

@@ -1,6 +1,5 @@
-/*! {% import "./base.css" %} */
-/*! {% import "alice/1.0.0/alice.css" %} */
+/*! import ./base.css */
 
-body {
-  content: 'bar';
-}
+body {content: 'bar'}
+
+/*! import alice/1.0.0/alice.css */

@@ -1,7 +1,6 @@
-/*! {% import "./base.css" %} */
+/*! define foo.css */
+/*! import ./base.css */
 
-body {
-  content: 'foo';
-}
+body {content: 'foo';}
 
-/*! {% import "./bar.css" %} */
+/*! import ./bar.css */
