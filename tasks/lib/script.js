@@ -37,6 +37,22 @@ exports.init = function(grunt) {
           return '';
         }
         return grunt.file.read(fpath);
+      } else if (/\.css$/.test(dep) && options.css2js) {
+        var fileInPaths;
+
+        options.paths.some(function(basedir) {
+          var fpath = path.join(basedir, dep);
+          if (grunt.file.exists(fpath)) {
+            fileInPaths = fpath;
+            return true;
+          }
+        });
+
+        if (!fileInPaths) {
+          grunt.log.warn('file ' + dep + ' not found');
+        } else {
+          return options.css2js(grunt.file.read(fileInPaths), dep);
+        }
       }
       return '';
     }).join(grunt.util.normalizelf(options.separator));

@@ -32,10 +32,14 @@ module.exports = function(grunt) {
       dist: {
         options: {
           paths: ['test/sea-modules'],
+          css2js: function(code, id) {
+            return code + id;
+          },
           relative: true
         },
         files: {
           'tmp/a.js': ['test/fixtures/a.js', 'test/fixtures/b.js'],
+          'tmp/foo.js': ['test/fixtures/foo.js'],
           'tmp/foo.css': ['test/fixtures/foo.css'],
         },
       }
