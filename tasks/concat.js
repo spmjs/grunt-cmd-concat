@@ -10,6 +10,7 @@ var path = require('path');
 
 module.exports = function(grunt) {
 
+  var ast = require('cmd-util').ast;
   var script = require('./lib/script').init(grunt);
   var style = require('./lib/style').init(grunt);
 
@@ -22,6 +23,10 @@ module.exports = function(grunt) {
     // Merge task-specific and/or target-specific options with these defaults.
     var options = this.options({
       separator: grunt.util.linefeed,
+      uglify: {
+        beautify: true,
+        comments: true
+      },
       paths: ['sea-modules'],
       processors: {},
       relative: true,
@@ -49,6 +54,17 @@ module.exports = function(grunt) {
         }
         return processor({src: filepath}, options);
       }).join(grunt.util.normalizelf(options.separator));
+
+      if (/\.js$/.test(f.dest)) {
+        src = ast.modify(src, {
+          dependencies: function(v) {
+            var ext = path.extname(v);
+            // remove useless dependencies
+            if (ext && ext !== '.js') return null;
+            return v;
+          }
+        }).print_to_string(options.uglify);
+      }
 
       // Write the destination file.
       grunt.file.write(f.dest, src);
