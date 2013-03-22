@@ -11,7 +11,7 @@ If you haven't used [Grunt](http://gruntjs.com/) before, be sure to check out th
 npm install grunt-cmd-concat --save-dev
 ```
 
-One the plugin has been installed, it may be enabled inside your Gruntfile with this line of JavaScript:
+Once the plugin has been installed, it may be enabled inside your Gruntfile with this line of JavaScript:
 
 ```js
 grunt.loadNpmTasks('grunt-cmd-concat');
@@ -37,6 +37,13 @@ grunt.initConfig({
 
 ### Options
 
+#### options.paths
+
+Type: `Array`
+Default value: `['sea-modules']`
+
+Where are the modules in the sea.
+
 #### options.separator
 
 Type: `String`
@@ -44,12 +51,31 @@ Default value: `',  '`
 
 A string value that is used to do something with whatever.
 
+#### options.banner
+
+Type: `String`
+
+The banner of the concated files.
+
 #### options.relative
 
 Type: `Boolean`
 Default value: `true`
 
 Include all relative dependencies.
+
+#### options.uglify
+
+Type: `Object`
+
+Uglify prettifier, you really don't have to change this value.
+
+#### options.processors
+
+Type: `Object`
+
+Processors are functions to find the related files to concat.
+
 
 ### Usage Examples
 
@@ -77,9 +103,6 @@ This will include all relative dependencies.
 ```js
 grunt.initConfig({
   concat: {
-    options: {
-      relative: true
-    },
     files: {
       'dist/a.js': ['src/a.js', 'src/b.js'],
     },
@@ -100,4 +123,7 @@ And the result should be the concat of `a.js`, `c.js` and `b.js`.
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [Grunt](http://gruntjs.com/).
 
 ## Release History
-_(Nothing yet)_
+
+**2013-03-22** `0.1.0b1`
+
+First beta version.
