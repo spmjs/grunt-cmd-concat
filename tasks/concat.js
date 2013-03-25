@@ -65,6 +65,8 @@ module.exports = function(grunt) {
           }
         }).print_to_string(options.uglify);
       }
+      // ensure a new line at the end of file
+      src += '\n';
 
       // Write the destination file.
       grunt.file.write(f.dest, src);
