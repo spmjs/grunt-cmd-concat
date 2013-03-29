@@ -86,13 +86,15 @@ This is the same as `grunt-contrib-concat`.
 ```js
 grunt.initConfig({
   concat: {
-    options: {
-      relative: false
-    },
-    files: {
-      'dist/a.js': ['src/a.js', 'src/b.js'],
-    },
-  },
+    foo: {
+      options: {
+        relative: false
+      },
+      files: {
+        'dist/a.js': ['src/a.js', 'src/b.js'],
+      }
+    }
+  }
 })
 ```
 
@@ -103,10 +105,12 @@ This will include all relative dependencies.
 ```js
 grunt.initConfig({
   concat: {
-    files: {
-      'dist/a.js': ['src/a.js', 'src/b.js'],
-    },
-  },
+    foo: {
+      files: {
+        'dist/a.js': ['src/a.js', 'src/b.js'],
+      }
+    }
+  }
 })
 ```
 
