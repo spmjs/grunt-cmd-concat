@@ -128,6 +128,6 @@ In lieu of a formal styleguide, take care to maintain the existing coding style.
 
 ## Release History
 
-**2013-03-22** `0.1.0b1`
+**April 1st, 2013** `0.1.0`
 
-First beta version.
+First version.
