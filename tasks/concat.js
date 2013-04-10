@@ -64,9 +64,11 @@ module.exports = function(grunt) {
 
         src = ast.modify(astCache, {
           dependencies: function(v) {
-            var altId = iduri.absolute(idGallery[0], v);
-            if (grunt.util._.contains(idGallery, altId)) {
-              return v;
+            if (v.charAt(0) === '.') {
+              var altId = iduri.absolute(idGallery[0], v);
+              if (grunt.util._.contains(idGallery, altId)) {
+                return v;
+              }
             }
             var ext = path.extname(v);
             // remove useless dependencies
