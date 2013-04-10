@@ -11,6 +11,7 @@ var path = require('path');
 module.exports = function(grunt) {
 
   var ast = require('cmd-util').ast;
+  var iduri = require('cmd-util').iduri;
   var script = require('./lib/script').init(grunt);
   var style = require('./lib/style').init(grunt);
 
@@ -56,8 +57,17 @@ module.exports = function(grunt) {
       }).join(grunt.util.normalizelf(options.separator));
 
       if (/\.js$/.test(f.dest)) {
-        src = ast.modify(src, {
+        var astCache = ast.getAst(src);
+        var idGallery = ast.parse(astCache).map(function(o) {
+          return o.id;
+        });
+
+        src = ast.modify(astCache, {
           dependencies: function(v) {
+            var altId = iduri.absolute(idGallery[0], v);
+            if (grunt.util._.contains(idGallery, altId)) {
+              return v;
+            }
             var ext = path.extname(v);
             // remove useless dependencies
             if (ext && ext !== '.js') return null;

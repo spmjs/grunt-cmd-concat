@@ -35,14 +35,14 @@ exports.init = function(grunt) {
     function hasImport() {
       meta = css.parse(data)[0];
 
-      var hasImport = false;
+      var isImportted = false;
       data = css.stringify(meta.code, function(node) {
         if (node.type === 'import' && node.id) {
-          hasImport = true;
+          isImportted = true;
           return importNode(node);
         }
       });
-      return hasImport;
+      return isImportted;
     }
 
     function importNode(node) {
