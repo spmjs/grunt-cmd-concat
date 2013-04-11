@@ -30,7 +30,7 @@ module.exports = function(grunt) {
       },
       paths: ['sea-modules'],
       processors: {},
-      relative: true,
+      include: 'self',
       banner: ''
     });
 

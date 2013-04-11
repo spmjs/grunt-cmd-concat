@@ -31,6 +31,7 @@
     "cmd-util": "~0.3.5"
   },
   "devDependencies": {
+    "grunt-cmd-transport": "~0.2.0",
     "grunt-contrib-jshint": "~0.1.1",
     "grunt-contrib-clean": "~0.4.0",
     "grunt-contrib-nodeunit": "~0.1.2",

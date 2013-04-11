@@ -18,7 +18,7 @@ exports.init = function(grunt) {
     }
     records.push(meta.id);
 
-    if (!options.relative) {
+    if (options.include === 'self') {
       return data;
     }
     var output = [];
@@ -51,7 +51,7 @@ exports.init = function(grunt) {
           return '';
         }
         return grunt.file.read(fpath);
-      } else if (/\.css$/.test(dep) && options.css2js) {
+      } else if ((/\.css$/.test(dep) && options.css2js) || options.include === 'all') {
         var fileInPaths;
 
         options.paths.some(function(basedir) {
@@ -65,7 +65,11 @@ exports.init = function(grunt) {
         if (!fileInPaths) {
           grunt.log.warn('file ' + dep + ' not found');
         } else {
-          return options.css2js(grunt.file.read(fileInPaths), dep);
+          var data = grunt.file.read(fileInPaths);
+          if (/\.css$/.test(dep)) {
+            return options.css2js(data, dep);
+          }
+          return data;
         }
       }
       return '';

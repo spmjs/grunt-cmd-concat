@@ -25,7 +25,7 @@ exports.init = function(grunt) {
       return '';
     }
 
-    if (!options.relative) {
+    if (options.include === 'self') {
       return data;
     }
 
