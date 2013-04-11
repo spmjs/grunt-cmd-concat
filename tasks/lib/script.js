@@ -56,6 +56,9 @@ exports.init = function(grunt) {
 
         options.paths.some(function(basedir) {
           var fpath = path.join(basedir, dep);
+          if (!/\.css$/.test(dep)) {
+            fpath += '.js';
+          }
           if (grunt.file.exists(fpath)) {
             fileInPaths = fpath;
             return true;
