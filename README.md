@@ -20,7 +20,7 @@ grunt.loadNpmTasks('grunt-cmd-concat');
 ## The "concat" task
 
 ### Overview
-In your project's Gruntfile, add a section named `cmd_concat` to the data object passed into `grunt.initConfig()`.
+In your project's Gruntfile, add a section named `concat` to the data object passed into `grunt.initConfig()`.
 
 ```js
 grunt.initConfig({
@@ -43,6 +43,19 @@ Type: `Array`
 Default value: `['sea-modules']`
 
 Where are the modules in the sea.
+
+
+#### options.include
+
+Type: `String`
+Default value: `'self'`
+Optional values:
+
+- self
+- relative
+- all
+
+How should it include its dependencies.
 
 #### options.separator
 
@@ -87,9 +100,6 @@ This is the same as `grunt-contrib-concat`.
 grunt.initConfig({
   concat: {
     foo: {
-      options: {
-        relative: false
-      },
       files: {
         'dist/a.js': ['src/a.js', 'src/b.js'],
       }
@@ -106,6 +116,9 @@ This will include all relative dependencies.
 grunt.initConfig({
   concat: {
     foo: {
+      options: {
+        include: 'relative'
+      },
       files: {
         'dist/a.js': ['src/a.js', 'src/b.js'],
       }
