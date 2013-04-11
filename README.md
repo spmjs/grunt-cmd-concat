@@ -112,6 +112,10 @@ grunt.initConfig({
 
 This will include all relative dependencies.
 
+**You should transport your modules first**, make sure your modules contain id and dependencies.
+
+Get [transport task](https://github.com/spmjs/grunt-cmd-transport).
+
 ```js
 grunt.initConfig({
   concat: {
