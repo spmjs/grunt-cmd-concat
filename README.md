@@ -145,6 +145,11 @@ In lieu of a formal styleguide, take care to maintain the existing coding style.
 
 ## Release History
 
+**April 11th, 2013** `0.2.0`
+
+- Remove options.relative
+- Add options.include
+
 **April 10th, 2013** `0.1.1`
 
 - Update `cmd-util`
