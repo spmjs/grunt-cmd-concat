@@ -90,6 +90,30 @@ Type: `Object`
 Processors are functions to find the related files to concat.
 
 
+#### options.css2js
+
+Type: `Function`
+Default value: `null`
+
+If a javascript module required a css, the css should be transported to js.
+
+You can get a css2js function from `grunt-cmd-transport`:
+
+```js
+var style = require('grunt-cmd-transport').style.init(grunt);
+
+grunt.initConfig({
+  concat: {
+    foo: {
+      options: {
+        css2js: style.css2js
+      }
+    }
+  }
+});
+```
+
+
 ### Usage Examples
 
 #### Simple Concat
