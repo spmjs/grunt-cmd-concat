@@ -14,6 +14,7 @@ module.exports = function(grunt) {
   var iduri = require('cmd-util').iduri;
   var script = require('./lib/script').init(grunt);
   var style = require('./lib/style').init(grunt);
+  var _ = grunt.util._;
 
   var processors = {
     '.js': script.jsConcat,
@@ -54,7 +55,7 @@ module.exports = function(grunt) {
         if (!processor) {
           return grunt.file.read(filepath);
         }
-        return processor({src: filepath}, options);
+        return processor({src: filepath}, _.extend({}, options, _.pick(f, 'include')));
       }).join(grunt.util.normalizelf(options.separator));
 
       if (/\.js$/.test(f.dest)) {
