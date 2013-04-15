@@ -31,7 +31,8 @@ module.exports = function(grunt) {
       paths: ['sea-modules'],
       processors: {},
       include: 'self',
-      banner: ''
+      banner: '',
+      footer: ''
     });
 
     this.files.forEach(function(f) {
@@ -78,7 +79,11 @@ module.exports = function(grunt) {
         }).print_to_string(options.uglify);
       }
       // ensure a new line at the end of file
-      src += '\n';
+      src += options.footer;
+
+      if (!/\n$/.test(src)) {
+        src += '\n';
+      }
 
       // Write the destination file.
       grunt.file.write(f.dest, src);

@@ -70,12 +70,11 @@ Type: `String`
 
 The banner of the concated files.
 
-#### options.relative
+### options.footer
 
-Type: `Boolean`
-Default value: `true`
+Type: `String`
 
-Include all relative dependencies.
+The footer of the concated files.
 
 #### options.uglify
 
