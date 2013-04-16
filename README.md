@@ -70,11 +70,18 @@ Type: `String`
 
 The banner of the concated files.
 
-### options.footer
+#### options.footer
 
 Type: `String`
 
 The footer of the concated files.
+
+#### options.noncmd
+
+Type: `Boolean`
+Default Value: `false`
+
+If set true, it will be treated as a noncmd file.
 
 #### options.uglify
 
@@ -123,6 +130,9 @@ This is the same as `grunt-contrib-concat`.
 grunt.initConfig({
   concat: {
     foo: {
+      options: {
+        noncmd: true
+      },
       files: {
         'dist/a.js': ['src/a.js', 'src/b.js'],
       }
