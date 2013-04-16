@@ -178,6 +178,11 @@ In lieu of a formal styleguide, take care to maintain the existing coding style.
 
 ## Release History
 
+**April 16th, 2013** `0.2.1`
+
+- Add options.footer
+- Add options.noncmd
+
 **April 11th, 2013** `0.2.0`
 
 - Remove options.relative
