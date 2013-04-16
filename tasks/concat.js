@@ -31,6 +31,7 @@ module.exports = function(grunt) {
       paths: ['sea-modules'],
       processors: {},
       include: 'self',
+      noncmd: false,
       banner: '',
       footer: ''
     });
@@ -51,13 +52,13 @@ module.exports = function(grunt) {
       }).map(function(filepath) {
         var extname = path.extname(filepath);
         var processor = options.processors[extname] || processors[extname];
-        if (!processor) {
+        if (!processor || options.noncmd) {
           return grunt.file.read(filepath);
         }
         return processor({src: filepath}, options);
       }).join(grunt.util.normalizelf(options.separator));
 
-      if (/\.js$/.test(f.dest)) {
+      if (/\.js$/.test(f.dest) && !options.noncmd) {
         var astCache = ast.getAst(src);
         var idGallery = ast.parse(astCache).map(function(o) {
           return o.id;
