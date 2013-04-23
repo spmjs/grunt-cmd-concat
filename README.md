@@ -178,6 +178,10 @@ In lieu of a formal styleguide, take care to maintain the existing coding style.
 
 ## Release History
 
+**April 23th, 2013** `0.2.2`
+
+- Bugfix. Remove output detect.
+
 **April 16th, 2013** `0.2.1`
 
 - Add options.footer
