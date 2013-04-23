@@ -21,23 +21,9 @@ exports.init = function(grunt) {
     if (options.include === 'self') {
       return data;
     }
-    var output = [];
-    if (options.pkg && options.pkg.spm) {
-      output = options.pkg.spm.output || [];
-    }
-    if (!Array.isArray(output)) {
-      output = Object.keys(output);
-    }
 
     var rv = meta.dependencies.map(function(dep) {
       if (dep.charAt(0) === '.') {
-        var _dep = path.normalize(dep).replace(/\\/, '/');
-        _dep = iduri.appendext(_dep);
-        _dep = _dep.replace(/-debug\.js$/, '.js');
-        if (grunt.util._.contains(output, _dep)) {
-          return '';
-        }
-
         var id = iduri.absolute(meta.id, dep);
         if (grunt.util._.contains(records, id)) {
           return '';
