@@ -36,7 +36,18 @@ exports.init = function(grunt) {
           grunt.log.warn('file ' + fpath + ' not found');
           return '';
         }
-        return grunt.file.read(fpath);
+
+        var astCache = ast.getAst(grunt.file.read(fpath));
+        var srcId = ast.parseFirst(astCache).id;
+        astCache = ast.modify(astCache,  function(v) {
+          if (v.charAt(0) === '.') {
+            return iduri.absolute(srcId, v);
+          }
+          return v;
+        });
+
+        return astCache.print_to_string(options.uglify);
+
       } else if ((/\.css$/.test(dep) && options.css2js) || options.include === 'all') {
         var fileInPaths;
 
