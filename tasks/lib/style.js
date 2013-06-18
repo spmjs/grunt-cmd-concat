@@ -12,6 +12,7 @@ exports.init = function(grunt) {
     var data = grunt.file.read(fileObj.src);
     var meta = css.parse(data)[0];
     var id = meta.id;
+
     if (!id) {
       grunt.log.warn('require a transported file.');
       return '';
@@ -36,26 +37,37 @@ exports.init = function(grunt) {
       meta = css.parse(data)[0];
 
       var isImportted = false;
-      data = css.stringify(meta.code, function(node) {
+      data = css.stringify(meta.code, function(node, parent) {
         if (node.type === 'import' && node.id) {
           isImportted = true;
-          return importNode(node);
+          return importNode(node, parent);
         }
       });
       return isImportted;
     }
 
-    function importNode(node) {
+    function importNode(node, parent) {
       // circle imports
       if (grunt.util._.contains(imports, node.id)) {
         return false;
       }
+
       imports.push(node.id);
 
       var fpath, parsed;
       if (node.id.charAt(0) === '.') {
+        if (parent && parent.id) {
+          node.id = path.join(path.dirname(parent.id), node.id);
+          if (process.platform === 'win32') {
+            node.id = node.id.replace(/\\/g, '/');
+          }
+        }
         fpath = path.join(path.dirname(fileObj.src), node.id);
-        if (!/\.css$/.test(fpath)) fpath += '.css';
+
+        if (!/\.css$/.test(fpath)) {
+          fpath += '.css';
+        }
+
         if (!grunt.file.exists(fpath)) {
           grunt.log.warn('file ' + fpath + ' not found');
           return false;
