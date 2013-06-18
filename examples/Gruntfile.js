@@ -39,6 +39,28 @@ module.exports = function(grunt) {
           // demo/all.js demo/relative.js demo/self.js assets/foo.js
           'tmp/all.js': ['demo/all.js']
         }
+      },
+
+      css: {
+        options: {
+          include: 'all'
+        },
+        files: [{
+          cwd: 'tmp/css/transport',
+          src: '**/*.css',
+          expand: true,
+          dest: 'tmp/css/concat'
+        }]
+      }
+    },
+
+    transport: {
+      css: {
+        files: [{
+          cwd: 'css',
+          src: '**/*.css',
+          dest: 'tmp/css/transport'
+        }]
       }
     }
 
@@ -46,8 +68,8 @@ module.exports = function(grunt) {
 
   // Actually load this plugin's task(s).
   grunt.loadTasks('../tasks');
-  // for real project:
-  // grunt.loadNpmTasks('grunt-cmd-concat')
+
+  grunt.loadNpmTasks('grunt-cmd-transport')
 
   // By default, lint and run all tests.
   grunt.registerTask('default', ['concat']);
