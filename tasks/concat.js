@@ -20,6 +20,8 @@ module.exports = function(grunt) {
     '.css': style.cssConcat
   };
 
+  var count = 0;
+
   grunt.registerMultiTask('concat', 'concat cmd modules.', function() {
     // Merge task-specific and/or target-specific options with these defaults.
     var options = this.options({
@@ -90,7 +92,9 @@ module.exports = function(grunt) {
       grunt.file.write(f.dest, src);
 
       // Print a success message.
-      grunt.log.writeln('File "' + f.dest + '" created.');
+      grunt.log.verbose.writeln('File "' + f.dest + '" created.');
+      count++;
     });
+    grunt.log.writeln('Concated ' + count.toString().cyan + ' files');
   });
 };
