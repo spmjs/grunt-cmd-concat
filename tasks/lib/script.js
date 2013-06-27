@@ -33,7 +33,9 @@ exports.init = function(grunt) {
         var fpath = path.join(path.dirname(fileObj.src), dep);
         if (!/\.js$/.test(fpath)) fpath += '.js';
         if (!grunt.file.exists(fpath)) {
-          grunt.log.warn('file ' + fpath + ' not found');
+          if (!/\{\w+\}/.test(fpath)) {
+            grunt.log.warn('file ' + fpath + ' not found');
+          }
           return '';
         }
 
