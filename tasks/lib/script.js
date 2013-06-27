@@ -67,7 +67,7 @@ exports.init = function(grunt) {
         } else {
           var data = grunt.file.read(fileInPaths);
           if (/\.css$/.test(dep)) {
-            return options.css2js(data, dep);
+            return options.css2js(data, dep, options);
           }
           return data;
         }
