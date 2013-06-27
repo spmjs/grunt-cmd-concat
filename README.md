@@ -178,6 +178,10 @@ In lieu of a formal styleguide, take care to maintain the existing coding style.
 
 ## Release History
 
+**June 27th, 2013** `0.2.4`
+
+css2js need options
+
 **June 18th, 2013** `0.2.3`
 
 - Bugfix for css concat. [#15](https://github.com/spmjs/grunt-cmd-concat/issues/15)
