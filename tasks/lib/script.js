@@ -22,6 +22,11 @@ exports.init = function(grunt) {
       return data;
     }
 
+    var pkg = grunt.file.readJSON(path.resolve('package.json'));
+    if (pkg.spm && pkg.spm.styleBox === true) {
+      options.styleBox = true;
+    }
+
     var rv = meta.dependencies.map(function(dep) {
       if (dep.charAt(0) === '.') {
         var id = iduri.absolute(meta.id, dep);
