@@ -1,7 +1,7 @@
 {
   "name": "grunt-cmd-concat",
   "description": "Concatenate cmd files.",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "homepage": "https://github.com/spmjs/grunt-cmd-concat",
   "author": {
     "name": "Hsiaoming Yang",
