@@ -76,8 +76,8 @@ module.exports = function(grunt) {
             }
             var ext = path.extname(v);
             // remove useless dependencies
+            if (ext && /\.(?:html|txt|tpl|handlebars|css)$/.test(ext)) return null;
 
-            if (ext && /\.(html|txt|tpl|handlebars|css)/.test(ext)) return null;
             return v;
           }
         }).print_to_string(options.uglify);
