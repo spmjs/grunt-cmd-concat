@@ -22,9 +22,9 @@ exports.init = function(grunt) {
       return data;
     }
 
-    var pkgPath = path.resolve('package.json');
+    var pkgPath = path.resolve('package.json'), pkg;
     if (grunt.file.exists(pkgPath)) {
-      var pkg = grunt.file.readJSON(pkgPath);
+      pkg = grunt.file.readJSON(pkgPath);
       if (pkg.spm && pkg.spm.styleBox === true) {
         options.styleBox = true;
       }
@@ -38,7 +38,7 @@ exports.init = function(grunt) {
         }
         records.push(id);
 
-        var fpath = path.join(path.dirname(fileObj.src), dep);
+        var fpath = path.join(basedir, iduri.isAlias(pkg, dep) ? iduri.parseAlias(pkg, dep) : dep);
         if (!/\.js$/.test(fpath)) fpath += '.js';
         if (!grunt.file.exists(fpath)) {
           if (!/\{\w+\}/.test(fpath)) {
