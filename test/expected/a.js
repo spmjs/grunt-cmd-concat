@@ -1,5 +1,3 @@
-define('a', [], {})
+define("a", [], {});
 
-
-define('b', ['./b'], {})
-
+define("b", [ "./b" ], {});
