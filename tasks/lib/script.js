@@ -30,19 +30,9 @@ exports.init = function(grunt) {
       }
     }
 
-    var uniqueDeps = {
-      deps: {},
-      has: function(id) {
-        return this.deps[id]
-      },
-      cache: function(data) {
-        if(data) {
-          var meta = ast.parse(data)
-          meta.forEach(function(m) {
-            uniqueDeps.deps[m.id] = true
-          })
-        }
-      }
+    function updateRecords(data) {
+      var meta = ast.parse(data).map(function(m) { return m.id });
+      records = grunt.util._.union(records, meta);
     }
 
     var rv = meta.dependencies.map(function(dep) {
@@ -62,13 +52,9 @@ exports.init = function(grunt) {
           return '';
         }
 
-        if(uniqueDeps.has(dep)) {
-          return ''
-        }
-
-        var data = grunt.file.read(fpath)
-        uniqueDeps.cache(data)
-
+        var data = grunt.file.read(fpath);
+        updateRecords(data);
+        
         var astCache = ast.getAst(data);
         var srcId = ast.parseFirst(astCache).id;
         astCache = ast.modify(astCache,  function(v) {
@@ -96,22 +82,21 @@ exports.init = function(grunt) {
         if (!fileInPaths) {
           grunt.log.warn('file ' + dep + ' not found');
         } else {
-          if (uniqueDeps.has(dep)) {
-            return ''
+          if (grunt.util._.contains(records, dep)) {
+            return '';
           }
           var data = grunt.file.read(fileInPaths);
           if (/\.css$/.test(dep)) {
-            var css2jsData = options.css2js(data, dep, options);
-            uniqueDeps.cache(css2jsData)
-            return css2jsData
+            data = options.css2js(data, dep, options);
           }
-          uniqueDeps.cache(data)
+          updateRecords(data);
           return data;
         }
       }
       return '';
     }).join(grunt.util.normalizelf(options.separator));
     return [data, rv].join(grunt.util.normalizelf(options.separator));
+
   };
 
   return exports;
