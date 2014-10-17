@@ -31,8 +31,8 @@ exports.init = function(grunt) {
     }
 
     function updateRecords(data) {
-      var meta = ast.parse(data).map(function(m) { return m.id });
-      records = grunt.util._.union(records, meta);
+      var ids = ast.parse(data).map(function(m) { return m.id });
+      records = grunt.util._.union(records, ids);
     }
 
     var rv = meta.dependencies.map(function(dep) {
