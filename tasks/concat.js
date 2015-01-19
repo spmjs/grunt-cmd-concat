@@ -20,9 +20,9 @@ module.exports = function(grunt) {
     '.css': style.cssConcat
   };
 
-  var count = 0;
 
   grunt.registerMultiTask('concat', 'concat cmd modules.', function() {
+    var count = 0;
     // Merge task-specific and/or target-specific options with these defaults.
     var options = this.options({
       separator: grunt.util.linefeed,
@@ -41,7 +41,6 @@ module.exports = function(grunt) {
     this.files.forEach(function(f) {
       // reset records
       grunt.option('concat-records', []);
-
       // Concat specified files.
       var src = options.banner + f.src.filter(function(filepath) {
         // Warn on and remove invalid source files (if nonull was set).
@@ -84,7 +83,6 @@ module.exports = function(grunt) {
       }
       // ensure a new line at the end of file
       src += options.footer;
-
       if (!/\n$/.test(src)) {
         src += '\n';
       }
@@ -93,7 +91,7 @@ module.exports = function(grunt) {
       grunt.file.write(f.dest, src);
 
       // Print a success message.
-      grunt.log.verbose.writeln('File "' + f.dest + '" created.');
+      grunt.log.writeln('file ' + f.dest + ' created.');
       count++;
     });
     grunt.log.writeln('Concated ' + count.toString().cyan + ' files');

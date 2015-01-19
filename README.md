@@ -178,6 +178,10 @@ In lieu of a formal styleguide, take care to maintain the existing coding style.
 
 ## Release History
 
+**Jan 19th, 2015** `0.2.8`
+
+reset count in every task
+
 **July 8th, 2013** `0.2.5`
 
 fix pkg not exist
