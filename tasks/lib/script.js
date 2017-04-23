@@ -30,6 +30,11 @@ exports.init = function(grunt) {
       }
     }
 
+    function updateRecords(data) {
+      var ids = ast.parse(data).map(function(m) { return m.id });
+      records = grunt.util._.union(records, ids);
+    }
+
     var rv = meta.dependencies.map(function(dep) {
       if (dep.charAt(0) === '.') {
         var id = iduri.absolute(meta.id, dep);
@@ -47,7 +52,10 @@ exports.init = function(grunt) {
           return '';
         }
 
-        var astCache = ast.getAst(grunt.file.read(fpath));
+        var data = grunt.file.read(fpath);
+        updateRecords(data);
+        
+        var astCache = ast.getAst(data);
         var srcId = ast.parseFirst(astCache).id;
         astCache = ast.modify(astCache,  function(v) {
           if (v.charAt(0) === '.') {
@@ -55,7 +63,6 @@ exports.init = function(grunt) {
           }
           return v;
         });
-
         return astCache.print_to_string(options.uglify);
 
       } else if ((/\.css$/.test(dep) && options.css2js) || options.include === 'all') {
@@ -75,16 +82,21 @@ exports.init = function(grunt) {
         if (!fileInPaths) {
           grunt.log.warn('file ' + dep + ' not found');
         } else {
+          if (grunt.util._.contains(records, dep)) {
+            return '';
+          }
           var data = grunt.file.read(fileInPaths);
           if (/\.css$/.test(dep)) {
-            return options.css2js(data, dep, options);
+            data = options.css2js(data, dep, options);
           }
+          updateRecords(data);
           return data;
         }
       }
       return '';
     }).join(grunt.util.normalizelf(options.separator));
     return [data, rv].join(grunt.util.normalizelf(options.separator));
+
   };
 
   return exports;
